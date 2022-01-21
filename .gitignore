@@ -1,4 +1,5 @@
 .idea
 venv/
 admin/data
+main/data
 __pycache__/
