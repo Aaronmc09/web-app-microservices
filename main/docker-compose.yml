@@ -1,0 +1,34 @@
+version: "3.3"
+
+services:
+
+  main_db:
+    container_name: main_db
+    image: postgres
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+  main:
+    container_name: main
+    build: .
+    command: python app.py
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - type: bind
+        source: .
+        target: /main
+    ports:
+      - "8001:5000"
+    depends_on:
+      - main_db
+    restart: always
